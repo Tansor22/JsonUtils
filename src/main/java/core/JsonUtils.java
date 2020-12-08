@@ -1,5 +1,6 @@
 package core;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.*;
@@ -27,7 +28,9 @@ public class JsonUtils {
 
     public static <T extends JsonNode> T parseJsonStrict(String json, Class<T> jsonClass) {
         try {
-            final ObjectMapper mapper = new ObjectMapper();
+            final ObjectMapper mapper = new ObjectMapper()
+                    // doesn't allow multiple top level values
+                    .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
             return jsonClass.cast(mapper.readTree(json));
         } catch (IOException | ClassCastException e) {
             return null;

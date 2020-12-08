@@ -27,6 +27,8 @@ public class JsonUtilsTest {
         assertThrows(JsonSyntaxException.class, () -> parseJsonStrict("13"));
         assertThrows(JsonSyntaxException.class, () -> parseJsonStrict("\"literal\""));
         assertThrows(JsonSyntaxException.class, () -> parseJsonStrict("[]"));
+        // shouldn't parse multiple top level values
+        assertThrows(JsonSyntaxException.class, () -> parseJsonStrict("{} {}"));
         // Numbers may be NaNs or infinities.
         assertThrows(JsonSyntaxException.class, () -> parseJsonStrict("{\"number\": NaN}"));
         assertThrows(JsonSyntaxException.class, () -> parseJsonStrict("{\"number\": Infinity}"));
@@ -78,6 +80,8 @@ public class JsonUtilsTest {
         assertNull(parseJsonStrict("13", ArrayNode.class));
         assertNull(parseJsonStrict("\"literal\"", ArrayNode.class));
         assertNull(parseJsonStrict("{}", ArrayNode.class));
+        // shouldn't parse multiple top level values
+        assertNull(parseJsonStrict("[] []", ArrayNode.class));
         // Numbers may be NaNs or infinities.
         assertNull(parseJsonStrict("{\"number\": NaN}", ArrayNode.class));
         assertNull(parseJsonStrict("{\"number\": Infinity}", ArrayNode.class));
